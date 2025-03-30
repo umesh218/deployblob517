@@ -5,8 +5,21 @@ provider "azurerm" {
 
 
 }
+resource "azurerm_resource_group" "deployblob" { # Resource Group is now "deployblob"
+  name     = "deployblob"
+  location = "East US" # Or your desired location
+}
 
-resource "azurerm_resource_group" "example" {
-  name     = "my-resource-group"
-  location = "East US"
+resource "azurerm_storage_account" "umesh517" { # Storage Account is now "umesh517"
+  name                     = "umesh517"
+  resource_group_name      = azurerm_resource_group.deployblob.name # Reference the new RG
+  location                 = azurerm_resource_group.deployblob.location # Use the new RG's location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_storage_container" "umesh218" { # Container is now "umesh218"
+  name                  = "umesh218"
+  storage_account_name  = azurerm_storage_account.umesh517.name # Reference the Storage Account
+  container_access_type = "private"
 }
